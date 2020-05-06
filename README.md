@@ -1,2 +1,3 @@
 # CreateRepo
-create and clone a GitHub repository from the command line
+
+### Create and clone a GitHub Repository from the command line
