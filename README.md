@@ -1,3 +1,26 @@
 # CreateRepo
 
-### Create and clone a GitHub Repository from the command line
+## Create and clone a GitHub Repository from the command line ##
+A python script to login to GitHub, create a repository, and clone the new repository to a specified location
+
+## Dependencies ##
+- chromedriver (recommended to have the executable in the project folder)
+    - A link can be found here: https://chromedriver.chromium.org/ 
+- selenium
+    - run pip install selenium
+
+## Usage ##
+- python3 <repo.py> <repository_name>
+- (optional): <repo.py> <repository_name> -p (private) -g (global)
+
+## login.json ##
+- Please ensure that you update your username and password for GitHub in login.json
+- This file is untracked
+
+## paths.json ##
+- path to your version of chromedriver
+- path to where you want the new repository to be created
+
+<br>
+
+Created by: Rob McMahon (6 May, 2020)
