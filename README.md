@@ -19,7 +19,7 @@ A python script to login to GitHub, create a repository, and clone the new repos
 
 ## paths.json ##
 - path to your version of chromedriver
-- path to where you want the new repository to be created
+- path to where you want the new repository to be created; (default is the parent directory)
 
 <br>
 

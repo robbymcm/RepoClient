@@ -1,7 +1,8 @@
 from selenium import webdriver
 import json
 import sys
-
+import os
+import time
 
 ## Retrieve data from paths.json
 def get_paths():
@@ -18,28 +19,31 @@ driver = webdriver.Chrome(paths[0])
 repo_path = paths[1]
 
 
-# Dictionary of necessary github links
+# Dictionary of necessary GitHub element xpaths
 driver_links = {
     'url': 'https://github.com/login',
-    'username': 'login_field',                                          # by id
-    'password': 'password',                                             # by id
-    'sign_in_btn': 'commit',                                            # by name
-    'new_btn': '/html/body/div[4]/div/aside[1]/div[2]/div[2]/div/h2/a', # by xpath onwards
+    'username': 'login_field',
+    'password': 'password',
+    'sign_in_btn': 'commit',
+    'new_btn': '/html/body/div[4]/div/aside[1]/div[2]/div[2]/div/h2/a',                 # by xpath onwards
     'repo_name': '/html/body/div[4]/main/div/form/div[2]/auto-check/dl/dd/input',
     'public': '/html/body/div[4]/main/div/form/div[3]/div[1]/label/input',
     'private': '/html/body/div[4]/main/div/form/div[3]/div[2]/label/input',
     'readme': '/html/body/div[4]/main/div/form/div[3]/div[4]/div[1]/label/input[2]',
-    'create_btn': '/html/body/div[4]/main/div/form/div[3]/button'
+    'create_btn': '/html/body/div[4]/main/div/form/div[3]/button',
+    'clone_btn': '/html/body/div[4]/div/main/div[2]/div/div[3]/span/get-repo-controller/details/summary',
+    'copy_link': '/html/body/div[4]/div/main/div[2]/div/div[3]/span/get-repo-controller/details/div/div/div[1]/div[1]/div/input'
 }
 
 # Errors
 errors = {
-    "E_REPO_NAME": 'Usage: repo.py <repository_name>',
-    "E_PERMISSIONS": 'Please choose either: `-p` for private or `-g` for global'
+    'E_REPO_NAME': 'Usage: repo.py <repository_name>',
+    'E_PERMISSIONS': 'Please choose either: `-p` for private or `-g` for global'
 }
 
 
 ## Retrieve login data from `login.json`
+## @returns - tuple (username, password)
 def get_login_data():
     with open('login.json', "r") as f:
         data = json.load(f)
@@ -51,7 +55,8 @@ def get_login_data():
     return (user_name, password)
 
 
-## process command line arguments
+## Process command line arguments
+## @returns - tuple (name, permission)
 def get_repo_name():
     name = ""
     permission = "-p"
@@ -86,6 +91,7 @@ def login():
 
 
 ## Create repo
+## @returns - link to newly created repo
 def create_repo(name, permission):
     driver.find_element_by_xpath(driver_links['new_btn']).click()
     driver.find_element_by_xpath(driver_links['repo_name']).send_keys(name)
@@ -93,10 +99,27 @@ def create_repo(name, permission):
         driver.find_element_by_xpath(driver_links['private']).click()
 
     driver.find_element_by_xpath(driver_links['readme']).click()
+    time.sleep(0.5)
     driver.find_element_by_xpath(driver_links['create_btn']).click()
+    driver.find_element_by_xpath(driver_links['clone_btn']).click()
+
+    # get value of the WebElement, split and take text after last space for repo link
+    link = driver.find_element_by_xpath(driver_links['copy_link']).get_property('value')
+    link = link.split(" ")[-1]
+
+    return link
+
+
+## Clone the repo after changing directory to repo_path
+def clone_repo(link):
+    os.chdir(repo_path)
+
+    command = "git clone " + link
+    os.system(command)
 
 
 if __name__ == "__main__":
     repository = get_repo_name()
     login()
-    create_repo(repository[0], repository[1])
+    link = create_repo(repository[0], repository[1])
+    clone_repo(link)
