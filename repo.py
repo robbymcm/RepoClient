@@ -123,3 +123,4 @@ if __name__ == "__main__":
     login()
     link = create_repo(repository[0], repository[1])
     clone_repo(link)
+    driver.close()
