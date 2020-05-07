@@ -4,14 +4,14 @@
 A python script to login to GitHub, create a repository, and clone the new repository to a specified location
 
 ## Dependencies ##
-- chromedriver (recommended to have the executable in the project folder)
+- chromedriver (recommended to have the executable in the project folder or in PATH)
     - A link can be found here: https://chromedriver.chromium.org/ 
 - selenium
-    - run pip install selenium
+    - pip install selenium in project folder or virtulenv
 
 ## Usage ##
-- python3 <repo.py> <repository_name>
-- (optional): <repo.py> <repository_name> -p (private) -g (global)
+- python3 repo.py <repository_name>
+- (optional): python3 repo.py <repository_name> -p (private) || -g (global)
 
 ## login.json ##
 - Please ensure that you update your username and password for GitHub in login.json
