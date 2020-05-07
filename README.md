@@ -1,4 +1,4 @@
-# CreateRepo
+# RepoClient
 
 ## Create and clone a GitHub Repository from the command line ##
 A python script to login to GitHub, create a repository, and clone the new repository to a specified location
